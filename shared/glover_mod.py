@@ -4,6 +4,8 @@ Module of handy functions.
 
 # do imports first, available to all functions in the module
 import os, sys, shutil
+from datetime import timedelta
+from datetime import datetime
 
 # define one or more variables, available to all functions in the module,
 # even without passing it directly
@@ -62,4 +64,20 @@ def square_my_number():
     return xx
 
 
-
+# found on the interwebs
+def datenum_to_datetime(datenum):
+    """
+    Convert Matlab datenum into Python datetime.
+    :param datenum: Date in datenum format
+    :return:        Datetime object corresponding to datenum.
+    """
+    days = datenum % 1
+    hours = days % 1 * 24
+    minutes = hours % 1 * 60
+    seconds = minutes % 1 * 60
+    return datetime.fromordinal(int(datenum)) \
+           + timedelta(days=int(days)) \
+           + timedelta(hours=int(hours)) \
+           + timedelta(minutes=int(minutes)) \
+           + timedelta(seconds=round(seconds)) \
+           - timedelta(days=366)
