@@ -64,20 +64,25 @@ def square_my_number():
     return xx
 
 
-# found on the interwebs
+# edited from code found on the interwebs
 def datenum_to_datetime(datenum):
     """
     Convert Matlab datenum into Python datetime.
-    :param datenum: Date in datenum format
-    :return:        Datetime object corresponding to datenum.
+    :param datenum: Date in datenum format, e.g. 737586.3347222221
+    :return:        Python datetime object, converted by 366 days 
     """
-    days = datenum % 1
-    hours = days % 1 * 24
-    minutes = hours % 1 * 60
-    seconds = minutes % 1 * 60
-    return datetime.fromordinal(int(datenum)) \
-           + timedelta(days=int(days)) \
-           + timedelta(hours=int(hours)) \
-           + timedelta(minutes=int(minutes)) \
-           + timedelta(seconds=round(seconds)) \
-           - timedelta(days=366)
+    # day = integer of datenum (no decimal) - 366
+    DD=datetime.fromordinal(int(datenum))
+    DD = DD - timedelta(days=366)
+    # calculate hour, min, sec from the fraction of a day in datenum:
+    HH = datenum % 1 * 24
+    MM = HH % 1 * 60
+    SS = MM % 1 * 60
+    FF = SS % 1 * 1000
+
+    HH = timedelta(hours=int(HH))
+    MM = timedelta(minutes=int(MM))
+    SS = timedelta(seconds=int(SS))
+    FF = timedelta(milliseconds=int(round(FF)))
+    
+    return DD + HH + MM + SS + FF
